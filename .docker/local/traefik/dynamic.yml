@@ -1,0 +1,15 @@
+tls:
+  certificates:
+    - certFile: /etc/traefik/ssl/_wildcard.localhost.pem
+      keyFile: /etc/traefik/ssl/_wildcard.localhost-key.pem
+    - certFile: /etc/traefik/ssl/localhost.pem
+      keyFile: /etc/traefik/ssl/localhost-key.pem
+    - certFile: /etc/traefik/ssl/traefik.localhost.pem
+      keyFile: /etc/traefik/ssl/traefik.localhost-key.pem
+    - certFile: /etc/traefik/ssl/vite.localhost.pem
+      keyFile: /etc/traefik/ssl/vite.localhost-key.pem
+  stores:
+    default:
+      defaultCertificate:
+        certFile: /etc/traefik/ssl/localhost.pem
+        keyFile: /etc/traefik/ssl/localhost-key.pem
