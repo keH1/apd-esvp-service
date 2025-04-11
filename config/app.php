@@ -123,4 +123,5 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'import_chunk_size' => (int) env('IMPORT_CHUNK_SIZE', 1000),
 ];

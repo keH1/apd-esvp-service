@@ -18,9 +18,9 @@ RUN apk add libintl icu icu-dev \
     && apk del icu-dev
 
 # Install GD
-#RUN apk add libpng-dev jpeg-dev freetype-dev libjpeg-turbo-dev \
-#    && docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \
-#    && docker-php-ext-install -j$(nproc) gd
+RUN apk add libpng-dev jpeg-dev freetype-dev libjpeg-turbo-dev \
+    && docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \
+    && docker-php-ext-install -j$(nproc) gd
 
 # Install Bcmath extension
 #RUN docker-php-ext-install -j$(nproc) bcmath
@@ -37,6 +37,15 @@ RUN docker-php-ext-install -j$(nproc) pdo_pgsql
 
 # Install Exif extension
 RUN docker-php-ext-install -j$(nproc) exif
+
+# Install Kafka extension
+RUN apk add --no-cache librdkafka-dev autoconf g++ make \
+    && pecl install rdkafka \
+    && docker-php-ext-enable rdkafka \
+    && apk del autoconf g++ make
+
+# Install kcat (Kafka CLI tool)
+RUN apk add --no-cache kcat
 
 # Install Composer
 #
