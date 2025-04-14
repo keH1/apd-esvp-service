@@ -11,8 +11,7 @@ DOCKER_COMPOSE := docker compose \
 	--file="$(DOCKER_COMPOSE_DIR)/docker-compose.yml" \
 	--project-name="$(PROJECT_NAME)" \
 	--project-directory="$(shell pwd)" \
-	--env-file="$(shell pwd)/.docker/prod/.env" \
-	--progress=tty
+	--env-file="$(shell pwd)/.docker/prod/.env"
 
 PHP := ${DOCKER_COMPOSE} run --rm -e XDEBUG_MODE=off php
 
