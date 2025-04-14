@@ -111,6 +111,7 @@ init: ## Initialize project
 	#make login
 	#make pull
 	make up
+	make composer-install
 	make artisan-key-generate
 	make artisan-migrate
 	make artisan-storage-link
@@ -119,6 +120,13 @@ init: ## Initialize project
 .PHONY: convert
 convert: ## Shows rendered Docker Compose file
 	${DOCKER_COMPOSE} convert
+
+########################################################################################################################
+### PHP Commands
+########################################################################################################################
+.PHONY: composer-install
+composer-install: ## Runs `composer install`
+	${COMPOSER} install
 
 ########################################################################################################################
 ### PHP Artisan Commands
