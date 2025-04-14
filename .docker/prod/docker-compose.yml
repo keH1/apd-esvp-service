@@ -6,13 +6,11 @@ services:
     depends_on:
       - postgres
     environment:
-      PHP_IDE_CONFIG: serverName=${PHP_IDE_CONFIG_SERVER_NAME}
       POSTGRES_HOSTNAME: ${POSTGRES_HOSTNAME}
       POSTGRES_PORT: ${POSTGRES_PORT}
       POSTGRES_DATABASE: ${POSTGRES_DATABASE}
       POSTGRES_USERNAME: ${POSTGRES_USERNAME}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    hostname: api.${PROJECT_NAME}.local
     image: ${CI_REGISTRY}/${CI_PROJECT_PATH}/local/php
     volumes:
       - "./:/var/www/html"
@@ -56,6 +54,7 @@ services:
     volumes:
       - "./:/var/www/html"
     networks:
+      - proxy
       - backend
 
   postgres:
@@ -83,4 +82,3 @@ networks:
 
 volumes:
   db:
-    name: ${DOCKER_DB_VOLUME_NAME_STORAGE}

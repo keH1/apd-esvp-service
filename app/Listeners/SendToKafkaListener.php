@@ -14,6 +14,7 @@ class SendToKafkaListener implements ShouldQueue
 
     /**
      * Handle the event.
+     * @throws \Exception
      */
     public function handle(PointsAccrualRegistered $event): void
     {

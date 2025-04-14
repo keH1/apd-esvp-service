@@ -77,4 +77,4 @@ RUN chown -R www-data:www-data /var/www/html \
   && chmod -R u=rwX,go=rX /var/www/html/public \
   && cp ${PHP_INI_DIR}/php.ini-production ${PHP_INI_DIR}/php.ini
 
-USER www-data
+USER 1005
