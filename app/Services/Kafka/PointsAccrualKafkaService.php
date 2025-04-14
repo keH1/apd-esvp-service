@@ -25,7 +25,7 @@ class PointsAccrualKafkaService
     public function sendMessageAndMarkAsSent(PointsAccrualData $data): bool
     {
         try {
-            $sendResult = Kafka::publish()->onTopic($this->topic)->withBody($data->toJson())->send();
+            $sendResult = Kafka::publish()->onTopic($this->topic)->withBody($data)->send();
             if (!$sendResult) {
                 throw new Exception('Error sending message to Kafka');
             }
