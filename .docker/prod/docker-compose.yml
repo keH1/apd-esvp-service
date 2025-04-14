@@ -1,0 +1,86 @@
+services:
+  php:
+    build:
+      context: .
+      dockerfile: .docker/local/php/Dockerfile
+    depends_on:
+      - postgres
+    environment:
+      PHP_IDE_CONFIG: serverName=${PHP_IDE_CONFIG_SERVER_NAME}
+      POSTGRES_HOSTNAME: ${POSTGRES_HOSTNAME}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_DATABASE: ${POSTGRES_DATABASE}
+      POSTGRES_USERNAME: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    hostname: api.${PROJECT_NAME}.local
+    image: ${CI_REGISTRY}/${CI_PROJECT_PATH}/local/php
+    volumes:
+      - "./:/var/www/html"
+    networks:
+      - proxy
+      - backend
+
+  scheduler:
+    build:
+      context: .
+      dockerfile: .docker/local/php/Dockerfile
+    depends_on:
+      - php
+    environment:
+      POSTGRES_HOSTNAME: ${POSTGRES_HOSTNAME}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_DATABASE: ${POSTGRES_DATABASE}
+      POSTGRES_USERNAME: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    image: ${CI_REGISTRY}/${CI_PROJECT_PATH}/local/scheduler
+    command: ["php", "artisan", "schedule:work"]
+    volumes:
+      - "./:/var/www/html"
+    networks:
+      - backend
+
+  queue:
+    build:
+      context: .
+      dockerfile: .docker/local/php/Dockerfile
+    depends_on:
+      - php
+    environment:
+      POSTGRES_HOSTNAME: ${POSTGRES_HOSTNAME}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_DATABASE: ${POSTGRES_DATABASE}
+      POSTGRES_USERNAME: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    image: ${CI_REGISTRY}/${CI_PROJECT_PATH}/local/scheduler
+    command: ["php", "artisan", "queue:work"]
+    volumes:
+      - "./:/var/www/html"
+    networks:
+      - backend
+
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: ${POSTGRES_DATABASE}
+      POSTGRES_USER: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+    hostname: ${POSTGRES_HOSTNAME}
+    ports:
+      - "${POSTGRES_PORT:-5432}:${POSTGRES_PORT:-5432}"
+    volumes:
+      - "db:/var/lib/postgresql/data"
+    networks:
+      - proxy
+      - backend
+
+networks:
+  proxy:
+    driver: bridge
+  backend:
+    driver: bridge
+    internal: true
+
+volumes:
+  db:
+    name: ${DOCKER_DB_VOLUME_NAME_STORAGE}

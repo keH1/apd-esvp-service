@@ -1,7 +1,7 @@
 #!/usr/bin/env make
 # SHELL = sh -xv
 
-DOCKER_COMPOSE_DIR := $(shell pwd)/.docker/local
+DOCKER_COMPOSE_DIR := $(shell pwd)/.docker/prod
 
 ifneq ("$(wildcard ${DOCKER_COMPOSE_DIR}/.env)","")
 	include $(DOCKER_COMPOSE_DIR)/.env
@@ -11,7 +11,7 @@ DOCKER_COMPOSE := docker compose \
 	--file="$(DOCKER_COMPOSE_DIR)/docker-compose.yml" \
 	--project-name="$(PROJECT_NAME)" \
 	--project-directory="$(shell pwd)" \
-	--env-file="$(shell pwd)/.docker/local/.env" \
+	--env-file="$(shell pwd)/.docker/prod/.env" \
 	--progress=tty
 
 PHP := ${DOCKER_COMPOSE} run --rm -e XDEBUG_MODE=off php
@@ -45,20 +45,20 @@ login: ## Login to GitLab registry
 	docker login ${CI_REGISTRY}
 
 .PHONY: build
-build: ## Build images for local development
+build: ## Build images for prod development
 	${DOCKER_COMPOSE} build
 
 .PHONY: push
-push: ## Push images for local development to GitLab registry
+push: ## Push images for prod development to GitLab registry
 	${DOCKER_COMPOSE} push
 
 .PHONY: pull
-pull: ## Pull images for local development from GitLab registry
+pull: ## Pull images for prod development from GitLab registry
 	${DOCKER_COMPOSE} pull
 
 .PHONY: copy-envs
 copy-envs:
-	cp .docker/local/.env.example .docker/local/.env
+	cp .docker/prod/.env.example .docker/prod/.env
 	cp .env.example .env
 
 .PHONY: shell
@@ -106,7 +106,7 @@ ground-zero: ## Removes logs, .env-files, folders: .data, vendor, node_modules
 	rm -rf ./.data
 	rm -rf ./node_modules
 	rm -rf ./vendor
-	if [ -f ./.docker/local/.env ]; then rm -f ./.docker/local/.env; fi
+	if [ -f ./.docker/prod/.env ]; then rm -f ./.docker/prod/.env; fi
 	rm -f ./.env
 	rm -f ./storage/logs/*.log
 	rm -f ./public/storage
