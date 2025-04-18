@@ -23,7 +23,7 @@ return new class extends Migration {
             $table->string('pan');
             $table->string('email')->nullable();
             $table->string('number_of_points');
-            $table->string('date_of_points');
+            $table->string('date_of_points')->nullable();
             $table->foreignId('points_accrual_status_id')->constrained('points_accrual_statuses');
             $table->string('sent_to_broker')->default(false);
             $table->timestamps();
