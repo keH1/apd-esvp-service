@@ -90,5 +90,6 @@ return [
      */
     'message_id_key' => env('MESSAGE_ID_KEY', 'laravel-kafka::message-id'),
 
-    'esvp_topic' => env('KAFKA_ESVP_TOPIC', 'esvp_service'),
+    'esvp_topic' => env('KAFKA_ESVP_TOPIC', 'esvp.service.points.accrual'),
+    'esvp_notification_topic' => env('KAFKA_ESVP_NOTIFICATION_TOPIC', 'esvp.service.points.accrual.notifications'),
 ];
