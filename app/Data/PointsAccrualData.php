@@ -49,7 +49,7 @@ class PointsAccrualData extends Data
             'pan' => $row['pan'],
             'email' => $row['e_mail_iz_kartocki_klienta_v_esvp'],
             'number_of_points' => $row['kolicestvo_ballov'],
-            'date_of_points' => $row['data_nacisleniia_ballov'] ?? CarbonImmutable::parse($row['data_nacisleniia_ballov']),
+            'date_of_points' => is_null($row['data_nacisleniia_ballov']) ? null : CarbonImmutable::parse($row['data_nacisleniia_ballov']),
             'points_accrual_status' => $row['status_nacisleniia_ballov'],
         ]);
     }
